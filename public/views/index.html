@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="Description" content="Enter your description here" />
+    <link rel="icon" href="../assets/images/portfolio-logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Ayan Gupta</title>
+
+    <style>
+        :root {
+            --terminal-green: #00ff41;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+        }
+
+
+        #loadingScreen {
+            padding: 1em;
+            height: 100%;
+            width: 100%;
+            background-color: rgba(10, 10, 10, 1);
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+
+        #loadingScreen h1 {
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+        }
+
+        #header {
+            color: var(--terminal-green);
+            margin-top: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            /* height: 500px; */
+            /* background-color: red; */
+        }
+
+        #loadingWrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        #moveToWrapper {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            /* bottom: 20px; */
+            left: 10px;
+            top: 0;
+            visibility: hidden;
+        }
+
+        .loadingscreentext {
+            /* font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; */
+            letter-spacing: 2px;
+            font-weight: 600;
+            color: var(--terminal-green);
+            font-size: 1.5em;
+        }
+
+
+        canvas {
+            box-shadow: 0px 0px 15px -2px gray !important;
+        }
+
+        .progressbarwrapper {
+            padding: 0;
+            margin-top: 20px;
+            background-color: transparent !important;
+            width: 500px;
+        }
+
+        .progressbar {
+            padding: 0;
+            /* background-color: greenyellow; */
+            letter-spacing: 2px;
+            /* border: solid 1px greenyellow; */
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            color: var(--terminal-green);
+        }
+
+        #guyfawkes {
+            /* height: 500px; */
+            font-size: 8px;
+        }
+
+        #altsite {
+            position: absolute;
+            bottom: 20px;
+            left: 10px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            padding: 1.5em;
+            justify-content: center;
+            align-items: center;
+            /* background-color: black; */
+            visibility: hidden;
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+    <div id="loadingScreen">
+        <code class="loadingscreentext">/root: #</code>
+        <pre id="header" class="mb-2 ">
+ █████╗ ██╗   ██╗ █████╗ ███╗   ██╗     ██████╗ ██╗   ██╗██████╗ ████████╗ █████╗ 
+██╔══██╗╚██╗ ██╔╝██╔══██╗████╗  ██║    ██╔════╝ ██║   ██║██╔══██╗╚══██╔══╝██╔══██╗
+███████║ ╚████╔╝ ███████║██╔██╗ ██║    ██║  ███╗██║   ██║██████╔╝   ██║   ███████║
+██╔══██║  ╚██╔╝  ██╔══██║██║╚██╗██║    ██║   ██║██║   ██║██╔═══╝    ██║   ██╔══██║
+██║  ██║   ██║   ██║  ██║██║ ╚████║    ╚██████╔╝╚██████╔╝██║        ██║   ██║  ██║
+╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝     ╚═════╝  ╚═════╝ ╚═╝        ╚═╝   ╚═╝  ╚═╝</pre>
+
+        <div id="loadingWrapper">
+            <code class="loadingscreentext">LOADING <span id="console-underscore">_</span></code>
+            <div class="progressbarwrapper">
+                <div class="progressbar" id="progressbar"></div>
+            </div>
+            <br>
+            <pre id="guyfawkes" class="loadingscreentext"></pre>
+
+        </div>
+    </div>
+
+    <div id="moveToWrapper">
+        <a id="contacts-helper" class="btn btn-outline-primary text-center" data-toggle="tooltip" data-placement="right"
+            title="Show Contacts">
+            <!-- Contacts -->
+            <i class="fa fa-phone" aria-hidden="true"></i>
+        </a>
+        <a id="skills-helper" class="btn btn-outline-danger text-center" data-toggle="tooltip" data-placement="right"
+            title="Show Skills">
+            <!-- Skills -->
+            <i class="fa fa-pen" aria-hidden="true"></i>
+        </a>
+        <a id="experience-helper" class="btn btn-outline-warning text-center" data-toggle="tooltip"
+            data-placement="right" title="Show Experience">
+            <!-- Experience -->
+            <i class="fa fa-briefcase" aria-hidden="true"></i>
+        </a>
+        <a id="projects-helper" class="btn btn-outline-success text-center" data-toggle="tooltip" data-placement="right"
+            title="Show Projects">
+            <!-- Projects -->
+            <i class="fa fa-paint-brush" aria-hidden="true"></i>
+        </a>
+        <a id="pavilion-helper" class="btn btn-outline-dark text-center" data-toggle="tooltip" data-placement="right"
+            title="Back to Pavilion">
+            <!--Back to Pavilion -->
+            <i class="fa fa-home" aria-hidden="true"></i>
+        </a>
+    </div>
+
+    <div id="altsite" data-toggle="tooltip" data-placement="right"
+        title="Click to visit alternate 'simple' website for mobile users" class=" btn btn-warning ">
+        <a href=" /alt" class="link-dark">
+            <i class="fas fa-mobile-alt fa-lg fa-fw"></i>
+        </a>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/hold-event@0.1.0/dist/hold-event.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/default-passive-events"></script>
+    <script src="../dist/bundle.js"></script>
+</body>
+
+</html>

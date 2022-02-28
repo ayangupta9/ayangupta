@@ -1,0 +1,453 @@
+html,
+body {
+  height: 100%;
+  max-height: 100%;
+}
+
+#mainPage {
+  /* height: 100%; */
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  width: 100%;
+}
+
+.container {
+  /* width: 100%; */
+  top: 0;
+  display: flex;
+  background-color: transparent !important;
+  /* height: 100%; */
+  justify-content: center;
+  flex-direction: column;
+  /* background-color: orange; */
+  z-index: 2;
+}
+
+#canvascontainer {
+  width: 100%;
+  /* background-color: orangered; */
+  height: 400%;
+  position: absolute;
+}
+
+#canvas {
+  position: absolute;
+  width: 100% !important;
+  height: 300% !important;
+  z-index: -1;
+  background-color: white;
+}
+
+#topModelChanger {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+}
+
+#mainSiteWrapper {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+}
+
+#topModelChangerList {
+  padding: 0;
+  display: flex;
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: lightgray;
+  border-radius: 50px;
+  padding: 0.5em;
+  gap: 10px;
+}
+
+#modelChangerItem {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: ease-out 0.2s;
+}
+
+.modelChangerButton {
+  font-size: 20px;
+  cursor: pointer;
+  color: black;
+  border-radius: 50%;
+  display: flex;
+  width: 30px;
+  text-align: center;
+  font-weight: 900;
+  vertical-align: middle;
+  height: 30px;
+  /* background-color: black; */
+  justify-content: center;
+  align-items: center;
+}
+
+.modelChangerItem:hover {
+  transform: scale(1.1);
+  transition: ease-out 0.2s;
+}
+
+.disabledbutton {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+#topHeader {
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 3em;
+  background-color: transparent !important;
+  justify-content: center;
+  height: 100vh;
+  /* background-color: yellow; */
+}
+
+#topHeaderh1 {
+  font-size: 5em;
+  background-color: transparent !important;
+}
+
+#aboutHeaderh1 {
+  /* margin: auto; */
+  font-weight: 600;
+}
+
+.headerh1 {
+  transition: ease-in 0.1s;
+  font-size: 2em;
+  color: #111111;
+  text-align: center;
+  height: min-content;
+  font-weight: 900;
+}
+
+.headerh1:hover {
+  transition: ease-in 0.1s;
+  color: orangered;
+}
+
+.small-text {
+  color: #111111;
+}
+
+p {
+  margin: 0;
+}
+
+#aboutWrapper {
+  background-color: transparent !important;
+
+  /* background-color: green; */
+}
+
+#aboutHeaderh1 {
+  background-color: transparent !important;
+
+  /* background-color: blue; */
+}
+
+#aboutContentWrapper {
+  background-color: transparent !important;
+
+  /* background-color: yellowgreen; */
+}
+
+.boldcontent {
+  transition: ease-in 0.1s;
+}
+
+.boldcontent:hover {
+  color: orangered;
+  transition: ease-in 0.1s;
+}
+
+.skillsList {
+  display: flex;
+  margin: 0;
+  background-color: transparent !important;
+  list-style: none;
+  padding: 0;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.skillsList li {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nontechskillscontent {
+  display: flex;
+  flex-wrap: wrap;
+  cursor: default;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.nontechskill {
+  background-color: black;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  text-align: center;
+  transition: ease-out 0.2s;
+  padding: 0.25em;
+  border-radius: 50px;
+  /* padding-bottom: 2px; */
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+  /* padding-right: 5px; */
+}
+
+.languageProficiencyContent {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 250px;
+}
+
+.languagewrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* gap: 30px; */
+}
+
+.nontechskill:hover {
+  transition: ease-out 0.2s;
+  background-color: orangered;
+  /* orangered */
+}
+
+.academicstitle {
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: ease-out 0.1s;
+}
+.academicstitle:hover {
+  color: orangered;
+  transition: ease-out 0.1s;
+
+  /* text-transform: uppercase; */
+  /* font-weight: 600; */
+}
+
+.projecttitle {
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.projecttitle a {
+  text-decoration: none !important;
+  transition: ease-in 0.1s;
+}
+
+.projecttitle a:hover {
+  transition: ease-in 0.1s;
+  color: orangered;
+}
+
+.projecttitle a {
+  color: #111111;
+  width: min-content;
+}
+
+.projectcontent {
+  margin-bottom: 1.5em;
+}
+
+#experienceContentWrapper {
+  /* overflow-x: scroll; */
+  /* max-width: 100%; */
+  /* max-height: 550px; */
+  /* display: inline; */
+  padding: 0.5em;
+  /* display: flex; */
+  /* justify-content: flex-start; */
+  /* gap: 10px; */
+}
+
+#academicsContentWrapper {
+  padding: 0.5em;
+}
+
+/* .experience-card {
+  height: 300px;
+  flex: 0 0 30em;
+  background-color: #111111;
+  border-radius: 10px;
+} */
+
+.experiencetitle {
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: ease-in 0.1s;
+}
+
+.experiencetitle:hover {
+  color: orangered;
+  transition: ease-in 0.1s;
+}
+
+/* #experienceContentWrapper::-webkit-scrollbar-track {
+  background-color: #d0d0d0;
+  box-shadow: 0px 0px 2px 0px gray inset;
+  border-radius: 20px;
+}
+
+
+#experienceContentWrapper::-webkit-scrollbar {
+  height: 4px;
+  border-radius: 20px;
+}
+
+#experienceContentWrapper::-webkit-scrollbar-thumb {
+  background-color: #ffffff;
+  border-radius: 10px;
+} */
+
+#contactsContentWrapper {
+  display: flex;
+  /* height: 150px; */
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 25px;
+}
+
+.contactWrapper {
+  width: 120px;
+  padding: 20px;
+  height: 120px;
+  border-radius: 20px;
+  box-shadow: 0px 0px 20px -2px lightgray;
+  /* border: solid 1px black; */
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: ease-in-out 0.25s;
+}
+
+.contactWrapper:hover {
+  transform: scale(1.05);
+  transition: ease-in-out 0.25s;
+  box-shadow: 0px 0px 20px -2px rgba(255, 69, 0, 0.3);
+}
+
+.contactWrapper img {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+#whackAMoleContent {
+  width: 500px;
+  height: 500px;
+}
+/* #whack-a-mole {
+    width: 100%;
+    height: 100%;
+} */
+
+#whack-a-mole {
+  width: 100%;
+  height: 100%;
+  max-width: 500px;
+  max-height: 500px;
+  background-color: white;
+  cursor: url('../../images/hammer2.png'), auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.wamrow {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
+.wamcell {
+  flex: 1;
+  border: solid 2px black;
+}
+
+.wamcell:hover {
+  background-color: lightpink;
+}
+
+#mainPageFooter {
+  height: 10vh;
+}
+
+@media (max-width: 700px) {
+  .row {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #contactsContentWrapper {
+    margin-top: 20px;
+    justify-content: center;
+  }
+
+  #projectsContentWrapper {
+    text-align: center;
+    margin-top: 20px;
+    justify-content: center;
+  }
+
+  #experienceContentWrapper {
+    text-align: center;
+    margin-top: 20px;
+    justify-content: center;
+  }
+
+  #academicsContentWrapper {
+    text-align: center;
+    margin-top: 20px;
+    justify-content: center;
+  }
+
+  #skillsContentWrapper {
+    text-align: center;
+    margin-top: 20px;
+    justify-content: center;
+  }
+  .languageProficiencyContent {
+    max-width: 100%;
+    padding-left: 2em;
+    padding-right: 2em;
+  }
+
+  .nontechskillscontent {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 650px) {
+  #thinkerWrapper {
+    height: 550px;
+  }
+  #kirbyWrapper {
+    height: 400px;
+  }
+}
