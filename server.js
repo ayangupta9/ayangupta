@@ -11,7 +11,7 @@ app.set('views', path.join(__dirname, '/public/views'))
 
 app.get('/', (req, res) => {
   if (req.useragent.isMobile) {
-    res.redirect('/simple')
+    res.redirect('/alt')
   } else {
     res.sendFile(path.join(__dirname, '/public/views/index.html'))
   }

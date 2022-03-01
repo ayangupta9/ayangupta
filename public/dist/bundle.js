@@ -1,190 +1,4 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-},{}],2:[function(require,module,exports){
 function _arrayLikeToArray(arr, len) {
   if (len == null || len > arr.length) len = arr.length;
 
@@ -196,13 +10,13 @@ function _arrayLikeToArray(arr, len) {
 }
 
 module.exports = _arrayLikeToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],3:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 function _arrayWithHoles(arr) {
   if (Array.isArray(arr)) return arr;
 }
 
 module.exports = _arrayWithHoles, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 var arrayLikeToArray = require("./arrayLikeToArray.js");
 
 function _arrayWithoutHoles(arr) {
@@ -210,7 +24,7 @@ function _arrayWithoutHoles(arr) {
 }
 
 module.exports = _arrayWithoutHoles, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{"./arrayLikeToArray.js":2}],5:[function(require,module,exports){
+},{"./arrayLikeToArray.js":1}],4:[function(require,module,exports){
 function _assertThisInitialized(self) {
   if (self === void 0) {
     throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -220,7 +34,7 @@ function _assertThisInitialized(self) {
 }
 
 module.exports = _assertThisInitialized, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
   try {
     var info = gen[key](arg);
@@ -258,7 +72,7 @@ function _asyncToGenerator(fn) {
 }
 
 module.exports = _asyncToGenerator, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -266,7 +80,7 @@ function _classCallCheck(instance, Constructor) {
 }
 
 module.exports = _classCallCheck, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 function _defineProperties(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
@@ -287,7 +101,7 @@ function _createClass(Constructor, protoProps, staticProps) {
 }
 
 module.exports = _createClass, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],9:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 function _defineProperty(obj, key, value) {
   if (key in obj) {
     Object.defineProperty(obj, key, {
@@ -304,7 +118,7 @@ function _defineProperty(obj, key, value) {
 }
 
 module.exports = _defineProperty, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 var superPropBase = require("./superPropBase.js");
 
 function _get() {
@@ -328,7 +142,7 @@ function _get() {
 }
 
 module.exports = _get, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{"./superPropBase.js":21}],11:[function(require,module,exports){
+},{"./superPropBase.js":20}],10:[function(require,module,exports){
 function _getPrototypeOf(o) {
   module.exports = _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
     return o.__proto__ || Object.getPrototypeOf(o);
@@ -337,7 +151,7 @@ function _getPrototypeOf(o) {
 }
 
 module.exports = _getPrototypeOf, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],12:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var setPrototypeOf = require("./setPrototypeOf.js");
 
 function _inherits(subClass, superClass) {
@@ -359,7 +173,7 @@ function _inherits(subClass, superClass) {
 }
 
 module.exports = _inherits, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{"./setPrototypeOf.js":19}],13:[function(require,module,exports){
+},{"./setPrototypeOf.js":18}],12:[function(require,module,exports){
 function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {
     "default": obj
@@ -367,13 +181,13 @@ function _interopRequireDefault(obj) {
 }
 
 module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],14:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 function _iterableToArray(iter) {
   if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
 }
 
 module.exports = _iterableToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],15:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 function _iterableToArrayLimit(arr, i) {
   var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
 
@@ -405,19 +219,19 @@ function _iterableToArrayLimit(arr, i) {
 }
 
 module.exports = _iterableToArrayLimit, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],16:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
 module.exports = _nonIterableRest, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],17:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
 module.exports = _nonIterableSpread, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],18:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 var _typeof = require("./typeof.js")["default"];
 
 var assertThisInitialized = require("./assertThisInitialized.js");
@@ -433,7 +247,7 @@ function _possibleConstructorReturn(self, call) {
 }
 
 module.exports = _possibleConstructorReturn, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{"./assertThisInitialized.js":5,"./typeof.js":23}],19:[function(require,module,exports){
+},{"./assertThisInitialized.js":4,"./typeof.js":22}],18:[function(require,module,exports){
 function _setPrototypeOf(o, p) {
   module.exports = _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
     o.__proto__ = p;
@@ -443,7 +257,7 @@ function _setPrototypeOf(o, p) {
 }
 
 module.exports = _setPrototypeOf, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],20:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 var arrayWithHoles = require("./arrayWithHoles.js");
 
 var iterableToArrayLimit = require("./iterableToArrayLimit.js");
@@ -457,7 +271,7 @@ function _slicedToArray(arr, i) {
 }
 
 module.exports = _slicedToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{"./arrayWithHoles.js":3,"./iterableToArrayLimit.js":15,"./nonIterableRest.js":16,"./unsupportedIterableToArray.js":24}],21:[function(require,module,exports){
+},{"./arrayWithHoles.js":2,"./iterableToArrayLimit.js":14,"./nonIterableRest.js":15,"./unsupportedIterableToArray.js":23}],20:[function(require,module,exports){
 var getPrototypeOf = require("./getPrototypeOf.js");
 
 function _superPropBase(object, property) {
@@ -470,7 +284,7 @@ function _superPropBase(object, property) {
 }
 
 module.exports = _superPropBase, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{"./getPrototypeOf.js":11}],22:[function(require,module,exports){
+},{"./getPrototypeOf.js":10}],21:[function(require,module,exports){
 var arrayWithoutHoles = require("./arrayWithoutHoles.js");
 
 var iterableToArray = require("./iterableToArray.js");
@@ -484,7 +298,7 @@ function _toConsumableArray(arr) {
 }
 
 module.exports = _toConsumableArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{"./arrayWithoutHoles.js":4,"./iterableToArray.js":14,"./nonIterableSpread.js":17,"./unsupportedIterableToArray.js":24}],23:[function(require,module,exports){
+},{"./arrayWithoutHoles.js":3,"./iterableToArray.js":13,"./nonIterableSpread.js":16,"./unsupportedIterableToArray.js":23}],22:[function(require,module,exports){
 function _typeof(obj) {
   "@babel/helpers - typeof";
 
@@ -496,7 +310,7 @@ function _typeof(obj) {
 }
 
 module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{}],24:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 var arrayLikeToArray = require("./arrayLikeToArray.js");
 
 function _unsupportedIterableToArray(o, minLen) {
@@ -509,10 +323,10 @@ function _unsupportedIterableToArray(o, minLen) {
 }
 
 module.exports = _unsupportedIterableToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;
-},{"./arrayLikeToArray.js":2}],25:[function(require,module,exports){
+},{"./arrayLikeToArray.js":1}],24:[function(require,module,exports){
 module.exports = require("regenerator-runtime");
 
-},{"regenerator-runtime":28}],26:[function(require,module,exports){
+},{"regenerator-runtime":28}],25:[function(require,module,exports){
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
@@ -1521,7 +1335,7 @@ module.exports = require("regenerator-runtime");
 
 })));
 
-},{}],27:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 /*!
  * camera-controls
  * https://github.com/yomotsu/camera-controls
@@ -2953,6 +2767,192 @@ module.exports = require("regenerator-runtime");
 	return CameraControls;
 
 }));
+
+},{}],27:[function(require,module,exports){
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
 
 },{}],28:[function(require,module,exports){
 /**
@@ -21364,7 +21364,7 @@ try {
 				}
 
 				const renderTargetProperties = properties.get(renderTarget);
-				const ignoreDepthValues = renderTargetProperties.__ignoreDepthValues !== undefined ? renderTargetProperties.__ignoreDepthValues : true;
+				const ignoreDepthValues = renderTargetProperties.__ignoreDepthValues !== undefined ? renderTargetProperties.__ignoreDepthValues : false;
 
 				if (ignoreDepthValues === false) {
 					if (renderTarget.depthBuffer) mask |= _gl.DEPTH_BUFFER_BIT;
@@ -44222,7 +44222,7 @@ if (edgeAlpha == 0.0) {
 
 })));
 
-},{"bidi-js":26,"three":29,"troika-three-utils":32,"troika-worker-utils":33}],32:[function(require,module,exports){
+},{"bidi-js":25,"three":29,"troika-three-utils":32,"troika-worker-utils":33}],32:[function(require,module,exports){
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('three')) :
   typeof define === 'function' && define.amd ? define(['exports', 'three'], factory) :
@@ -45603,7 +45603,7 @@ if (dashing.x + dashing.y > 0.0) {
 })));
 
 }).call(this)}).call(this,require('_process'))
-},{"_process":1}],34:[function(require,module,exports){
+},{"_process":27}],34:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -46895,7 +46895,7 @@ function _main() {
             experienceGroup = new THREE.Group();
             scene.add(experienceGroup);
             socialLinks = {
-              instaIcon: 'https://google.com',
+              instaIcon: 'https://www.instagram.com/ayan._.gupta/',
               githubIcon: 'https://github.com/ayangupta9',
               linkedinIcon: 'https://www.linkedin.com/in/ayan-gupta-4b2158213/',
               twitterIcon: 'https://twitter.com/ayangupta_9',
@@ -47015,7 +47015,7 @@ main()["catch"](function (err) {
   console.error(err);
 });
 
-},{"./three/FontLoader.js":35,"./three/GLTFLoader.js":36,"./three/TextGeometry.js":37,"./three/three.js":38,"@babel/runtime/helpers/asyncToGenerator":6,"@babel/runtime/helpers/interopRequireDefault":13,"@babel/runtime/helpers/slicedToArray":20,"@babel/runtime/helpers/toConsumableArray":22,"@babel/runtime/helpers/typeof":23,"@babel/runtime/regenerator":25,"camera-controls":27,"threex-domevents":30,"troika-three-text":31}],35:[function(require,module,exports){
+},{"./three/FontLoader.js":35,"./three/GLTFLoader.js":36,"./three/TextGeometry.js":37,"./three/three.js":38,"@babel/runtime/helpers/asyncToGenerator":5,"@babel/runtime/helpers/interopRequireDefault":12,"@babel/runtime/helpers/slicedToArray":19,"@babel/runtime/helpers/toConsumableArray":21,"@babel/runtime/helpers/typeof":22,"@babel/runtime/regenerator":24,"camera-controls":26,"threex-domevents":30,"troika-three-text":31}],35:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -47198,7 +47198,7 @@ function createPath(_char2, scale, offsetX, offsetY, data) {
 
 Font.prototype.isFont = true;
 
-},{"./three.js":38,"@babel/runtime/helpers/classCallCheck":7,"@babel/runtime/helpers/createClass":8,"@babel/runtime/helpers/getPrototypeOf":11,"@babel/runtime/helpers/inherits":12,"@babel/runtime/helpers/interopRequireDefault":13,"@babel/runtime/helpers/possibleConstructorReturn":18}],36:[function(require,module,exports){
+},{"./three.js":38,"@babel/runtime/helpers/classCallCheck":6,"@babel/runtime/helpers/createClass":7,"@babel/runtime/helpers/getPrototypeOf":10,"@babel/runtime/helpers/inherits":11,"@babel/runtime/helpers/interopRequireDefault":12,"@babel/runtime/helpers/possibleConstructorReturn":17}],36:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -50469,7 +50469,7 @@ function toTrianglesDrawMode(geometry, drawMode) {
   return newGeometry;
 }
 
-},{"./three.js":38,"@babel/runtime/helpers/assertThisInitialized":5,"@babel/runtime/helpers/classCallCheck":7,"@babel/runtime/helpers/createClass":8,"@babel/runtime/helpers/get":10,"@babel/runtime/helpers/getPrototypeOf":11,"@babel/runtime/helpers/inherits":12,"@babel/runtime/helpers/interopRequireDefault":13,"@babel/runtime/helpers/possibleConstructorReturn":18,"@babel/runtime/helpers/slicedToArray":20,"@babel/runtime/helpers/typeof":23}],37:[function(require,module,exports){
+},{"./three.js":38,"@babel/runtime/helpers/assertThisInitialized":4,"@babel/runtime/helpers/classCallCheck":6,"@babel/runtime/helpers/createClass":7,"@babel/runtime/helpers/get":9,"@babel/runtime/helpers/getPrototypeOf":10,"@babel/runtime/helpers/inherits":11,"@babel/runtime/helpers/interopRequireDefault":12,"@babel/runtime/helpers/possibleConstructorReturn":17,"@babel/runtime/helpers/slicedToArray":19,"@babel/runtime/helpers/typeof":22}],37:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -50529,7 +50529,7 @@ var TextGeometry = /*#__PURE__*/function (_ExtrudeGeometry) {
 
 exports.TextGeometry = TextGeometry;
 
-},{"./three.js":38,"@babel/runtime/helpers/classCallCheck":7,"@babel/runtime/helpers/createClass":8,"@babel/runtime/helpers/getPrototypeOf":11,"@babel/runtime/helpers/inherits":12,"@babel/runtime/helpers/interopRequireDefault":13,"@babel/runtime/helpers/possibleConstructorReturn":18}],38:[function(require,module,exports){
+},{"./three.js":38,"@babel/runtime/helpers/classCallCheck":6,"@babel/runtime/helpers/createClass":7,"@babel/runtime/helpers/getPrototypeOf":10,"@babel/runtime/helpers/inherits":11,"@babel/runtime/helpers/interopRequireDefault":12,"@babel/runtime/helpers/possibleConstructorReturn":17}],38:[function(require,module,exports){
 "use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault");var _regenerator=_interopRequireDefault(require("@babel/runtime/regenerator"));var _asyncToGenerator2=_interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));var _defineProperty2=_interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));var _slicedToArray2=_interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));var _get2=_interopRequireDefault(require("@babel/runtime/helpers/get"));var _assertThisInitialized2=_interopRequireDefault(require("@babel/runtime/helpers/assertThisInitialized"));var _inherits2=_interopRequireDefault(require("@babel/runtime/helpers/inherits"));var _possibleConstructorReturn2=_interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));var _getPrototypeOf2=_interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));var _classCallCheck2=_interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));var _createClass2=_interopRequireDefault(require("@babel/runtime/helpers/createClass"));var _typeof2=_interopRequireDefault(require("@babel/runtime/helpers/typeof"));function _createForOfIteratorHelper(o,allowArrayLike){var it=typeof Symbol!=="undefined"&&o[Symbol.iterator]||o["@@iterator"];if(!it){if(Array.isArray(o)||(it=_unsupportedIterableToArray(o))||allowArrayLike&&o&&typeof o.length==="number"){if(it)o=it;var i=0;var F=function F(){};return{s:F,n:function n(){if(i>=o.length)return{done:true};return{done:false,value:o[i++]};},e:function e(_e){throw _e;},f:F};}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion=true,didErr=false,err;return{s:function s(){it=it.call(o);},n:function n(){var step=it.next();normalCompletion=step.done;return step;},e:function e(_e2){didErr=true;err=_e2;},f:function f(){try{if(!normalCompletion&&it["return"]!=null)it["return"]();}finally{if(didErr)throw err;}}};}function _unsupportedIterableToArray(o,minLen){if(!o)return;if(typeof o==="string")return _arrayLikeToArray(o,minLen);var n=Object.prototype.toString.call(o).slice(8,-1);if(n==="Object"&&o.constructor)n=o.constructor.name;if(n==="Map"||n==="Set")return Array.from(o);if(n==="Arguments"||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))return _arrayLikeToArray(o,minLen);}function _arrayLikeToArray(arr,len){if(len==null||len>arr.length)len=arr.length;for(var i=0,arr2=new Array(len);i<len;i++){arr2[i]=arr[i];}return arr2;}function _createSuper(Derived){var hasNativeReflectConstruct=_isNativeReflectConstruct();return function _createSuperInternal(){var Super=(0,_getPrototypeOf2["default"])(Derived),result;if(hasNativeReflectConstruct){var NewTarget=(0,_getPrototypeOf2["default"])(this).constructor;result=Reflect.construct(Super,arguments,NewTarget);}else{result=Super.apply(this,arguments);}return(0,_possibleConstructorReturn2["default"])(this,result);};}function _isNativeReflectConstruct(){if(typeof Reflect==="undefined"||!Reflect.construct)return false;if(Reflect.construct.sham)return false;if(typeof Proxy==="function")return true;try{Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],function(){}));return true;}catch(e){return false;}}/**
  * @license
  * Copyright 2010-2022 Three.js Authors
@@ -53109,4 +53109,4 @@ var SceneUtils={createMultiMaterialObject:function/* geometry, materials */creat
 function LensFlare(){console.error('THREE.LensFlare has been moved to /examples/jsm/objects/Lensflare.js');}//
 function ParametricGeometry(){console.error('THREE.ParametricGeometry has been moved to /examples/jsm/geometries/ParametricGeometry.js');return new BufferGeometry();}function TextGeometry(){console.error('THREE.TextGeometry has been moved to /examples/jsm/geometries/TextGeometry.js');return new BufferGeometry();}function FontLoader(){console.error('THREE.FontLoader has been moved to /examples/jsm/loaders/FontLoader.js');}function Font(){console.error('THREE.Font has been moved to /examples/jsm/loaders/FontLoader.js');}function ImmediateRenderObject(){console.error('THREE.ImmediateRenderObject has been removed.');}if(typeof __THREE_DEVTOOLS__!=='undefined'){__THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('register',{detail:{revision:REVISION}}));}if(typeof window!=='undefined'){if(window.__THREE__){console.warn('WARNING: Multiple instances of Three.js being imported.');}else{window.__THREE__=REVISION;}}exports.ACESFilmicToneMapping=ACESFilmicToneMapping;exports.AddEquation=AddEquation;exports.AddOperation=AddOperation;exports.AdditiveAnimationBlendMode=AdditiveAnimationBlendMode;exports.AdditiveBlending=AdditiveBlending;exports.AlphaFormat=AlphaFormat;exports.AlwaysDepth=AlwaysDepth;exports.AlwaysStencilFunc=AlwaysStencilFunc;exports.AmbientLight=AmbientLight;exports.AmbientLightProbe=AmbientLightProbe;exports.AnimationClip=AnimationClip;exports.AnimationLoader=AnimationLoader;exports.AnimationMixer=AnimationMixer;exports.AnimationObjectGroup=AnimationObjectGroup;exports.AnimationUtils=AnimationUtils;exports.ArcCurve=ArcCurve;exports.ArrayCamera=ArrayCamera;exports.ArrowHelper=ArrowHelper;exports.Audio=Audio;exports.AudioAnalyser=AudioAnalyser;exports.AudioContext=AudioContext;exports.AudioListener=AudioListener;exports.AudioLoader=AudioLoader;exports.AxesHelper=AxesHelper;exports.AxisHelper=AxisHelper;exports.BackSide=BackSide;exports.BasicDepthPacking=BasicDepthPacking;exports.BasicShadowMap=BasicShadowMap;exports.BinaryTextureLoader=BinaryTextureLoader;exports.Bone=Bone;exports.BooleanKeyframeTrack=BooleanKeyframeTrack;exports.BoundingBoxHelper=BoundingBoxHelper;exports.Box2=Box2;exports.Box3=Box3;exports.Box3Helper=Box3Helper;exports.BoxBufferGeometry=BoxGeometry;exports.BoxGeometry=BoxGeometry;exports.BoxHelper=BoxHelper;exports.BufferAttribute=BufferAttribute;exports.BufferGeometry=BufferGeometry;exports.BufferGeometryLoader=BufferGeometryLoader;exports.ByteType=ByteType;exports.Cache=Cache;exports.Camera=Camera;exports.CameraHelper=CameraHelper;exports.CanvasRenderer=CanvasRenderer;exports.CanvasTexture=CanvasTexture;exports.CatmullRomCurve3=CatmullRomCurve3;exports.CineonToneMapping=CineonToneMapping;exports.CircleBufferGeometry=CircleGeometry;exports.CircleGeometry=CircleGeometry;exports.ClampToEdgeWrapping=ClampToEdgeWrapping;exports.Clock=Clock;exports.Color=Color;exports.ColorKeyframeTrack=ColorKeyframeTrack;exports.CompressedTexture=CompressedTexture;exports.CompressedTextureLoader=CompressedTextureLoader;exports.ConeBufferGeometry=ConeGeometry;exports.ConeGeometry=ConeGeometry;exports.CubeCamera=CubeCamera;exports.CubeReflectionMapping=CubeReflectionMapping;exports.CubeRefractionMapping=CubeRefractionMapping;exports.CubeTexture=CubeTexture;exports.CubeTextureLoader=CubeTextureLoader;exports.CubeUVReflectionMapping=CubeUVReflectionMapping;exports.CubeUVRefractionMapping=CubeUVRefractionMapping;exports.CubicBezierCurve=CubicBezierCurve;exports.CubicBezierCurve3=CubicBezierCurve3;exports.CubicInterpolant=CubicInterpolant;exports.CullFaceBack=CullFaceBack;exports.CullFaceFront=CullFaceFront;exports.CullFaceFrontBack=CullFaceFrontBack;exports.CullFaceNone=CullFaceNone;exports.Curve=Curve;exports.CurvePath=CurvePath;exports.CustomBlending=CustomBlending;exports.CustomToneMapping=CustomToneMapping;exports.CylinderBufferGeometry=CylinderGeometry;exports.CylinderGeometry=CylinderGeometry;exports.Cylindrical=Cylindrical;exports.DataTexture=DataTexture;exports.DataTexture2DArray=DataTexture2DArray;exports.DataTexture3D=DataTexture3D;exports.DataTextureLoader=DataTextureLoader;exports.DataUtils=DataUtils;exports.DecrementStencilOp=DecrementStencilOp;exports.DecrementWrapStencilOp=DecrementWrapStencilOp;exports.DefaultLoadingManager=DefaultLoadingManager;exports.DepthFormat=DepthFormat;exports.DepthStencilFormat=DepthStencilFormat;exports.DepthTexture=DepthTexture;exports.DirectionalLight=DirectionalLight;exports.DirectionalLightHelper=DirectionalLightHelper;exports.DiscreteInterpolant=DiscreteInterpolant;exports.DodecahedronBufferGeometry=DodecahedronGeometry;exports.DodecahedronGeometry=DodecahedronGeometry;exports.DoubleSide=DoubleSide;exports.DstAlphaFactor=DstAlphaFactor;exports.DstColorFactor=DstColorFactor;exports.DynamicBufferAttribute=DynamicBufferAttribute;exports.DynamicCopyUsage=DynamicCopyUsage;exports.DynamicDrawUsage=DynamicDrawUsage;exports.DynamicReadUsage=DynamicReadUsage;exports.EdgesGeometry=EdgesGeometry;exports.EdgesHelper=EdgesHelper;exports.EllipseCurve=EllipseCurve;exports.EqualDepth=EqualDepth;exports.EqualStencilFunc=EqualStencilFunc;exports.EquirectangularReflectionMapping=EquirectangularReflectionMapping;exports.EquirectangularRefractionMapping=EquirectangularRefractionMapping;exports.Euler=Euler;exports.EventDispatcher=EventDispatcher;exports.ExtrudeBufferGeometry=ExtrudeGeometry;exports.ExtrudeGeometry=ExtrudeGeometry;exports.FaceColors=FaceColors;exports.FileLoader=FileLoader;exports.FlatShading=FlatShading;exports.Float16BufferAttribute=Float16BufferAttribute;exports.Float32Attribute=Float32Attribute;exports.Float32BufferAttribute=Float32BufferAttribute;exports.Float64Attribute=Float64Attribute;exports.Float64BufferAttribute=Float64BufferAttribute;exports.FloatType=FloatType;exports.Fog=Fog;exports.FogExp2=FogExp2;exports.Font=Font;exports.FontLoader=FontLoader;exports.FramebufferTexture=FramebufferTexture;exports.FrontSide=FrontSide;exports.Frustum=Frustum;exports.GLBufferAttribute=GLBufferAttribute;exports.GLSL1=GLSL1;exports.GLSL3=GLSL3;exports.GreaterDepth=GreaterDepth;exports.GreaterEqualDepth=GreaterEqualDepth;exports.GreaterEqualStencilFunc=GreaterEqualStencilFunc;exports.GreaterStencilFunc=GreaterStencilFunc;exports.GridHelper=GridHelper;exports.Group=Group;exports.HalfFloatType=HalfFloatType;exports.HemisphereLight=HemisphereLight;exports.HemisphereLightHelper=HemisphereLightHelper;exports.HemisphereLightProbe=HemisphereLightProbe;exports.IcosahedronBufferGeometry=IcosahedronGeometry;exports.IcosahedronGeometry=IcosahedronGeometry;exports.ImageBitmapLoader=ImageBitmapLoader;exports.ImageLoader=ImageLoader;exports.ImageUtils=ImageUtils;exports.ImmediateRenderObject=ImmediateRenderObject;exports.IncrementStencilOp=IncrementStencilOp;exports.IncrementWrapStencilOp=IncrementWrapStencilOp;exports.InstancedBufferAttribute=InstancedBufferAttribute;exports.InstancedBufferGeometry=InstancedBufferGeometry;exports.InstancedInterleavedBuffer=InstancedInterleavedBuffer;exports.InstancedMesh=InstancedMesh;exports.Int16Attribute=Int16Attribute;exports.Int16BufferAttribute=Int16BufferAttribute;exports.Int32Attribute=Int32Attribute;exports.Int32BufferAttribute=Int32BufferAttribute;exports.Int8Attribute=Int8Attribute;exports.Int8BufferAttribute=Int8BufferAttribute;exports.IntType=IntType;exports.InterleavedBuffer=InterleavedBuffer;exports.InterleavedBufferAttribute=InterleavedBufferAttribute;exports.Interpolant=Interpolant;exports.InterpolateDiscrete=InterpolateDiscrete;exports.InterpolateLinear=InterpolateLinear;exports.InterpolateSmooth=InterpolateSmooth;exports.InvertStencilOp=InvertStencilOp;exports.JSONLoader=JSONLoader;exports.KeepStencilOp=KeepStencilOp;exports.KeyframeTrack=KeyframeTrack;exports.LOD=LOD;exports.LatheBufferGeometry=LatheGeometry;exports.LatheGeometry=LatheGeometry;exports.Layers=Layers;exports.LensFlare=LensFlare;exports.LessDepth=LessDepth;exports.LessEqualDepth=LessEqualDepth;exports.LessEqualStencilFunc=LessEqualStencilFunc;exports.LessStencilFunc=LessStencilFunc;exports.Light=Light;exports.LightProbe=LightProbe;exports.Line=Line;exports.Line3=Line3;exports.LineBasicMaterial=LineBasicMaterial;exports.LineCurve=LineCurve;exports.LineCurve3=LineCurve3;exports.LineDashedMaterial=LineDashedMaterial;exports.LineLoop=LineLoop;exports.LinePieces=LinePieces;exports.LineSegments=LineSegments;exports.LineStrip=LineStrip;exports.LinearEncoding=LinearEncoding;exports.LinearFilter=LinearFilter;exports.LinearInterpolant=LinearInterpolant;exports.LinearMipMapLinearFilter=LinearMipMapLinearFilter;exports.LinearMipMapNearestFilter=LinearMipMapNearestFilter;exports.LinearMipmapLinearFilter=LinearMipmapLinearFilter;exports.LinearMipmapNearestFilter=LinearMipmapNearestFilter;exports.LinearToneMapping=LinearToneMapping;exports.Loader=Loader;exports.LoaderUtils=LoaderUtils;exports.LoadingManager=LoadingManager;exports.LoopOnce=LoopOnce;exports.LoopPingPong=LoopPingPong;exports.LoopRepeat=LoopRepeat;exports.LuminanceAlphaFormat=LuminanceAlphaFormat;exports.LuminanceFormat=LuminanceFormat;exports.MOUSE=MOUSE;exports.Material=Material;exports.MaterialLoader=MaterialLoader;exports.Math=MathUtils;exports.MathUtils=MathUtils;exports.Matrix3=Matrix3;exports.Matrix4=Matrix4;exports.MaxEquation=MaxEquation;exports.Mesh=Mesh;exports.MeshBasicMaterial=MeshBasicMaterial;exports.MeshDepthMaterial=MeshDepthMaterial;exports.MeshDistanceMaterial=MeshDistanceMaterial;exports.MeshFaceMaterial=MeshFaceMaterial;exports.MeshLambertMaterial=MeshLambertMaterial;exports.MeshMatcapMaterial=MeshMatcapMaterial;exports.MeshNormalMaterial=MeshNormalMaterial;exports.MeshPhongMaterial=MeshPhongMaterial;exports.MeshPhysicalMaterial=MeshPhysicalMaterial;exports.MeshStandardMaterial=MeshStandardMaterial;exports.MeshToonMaterial=MeshToonMaterial;exports.MinEquation=MinEquation;exports.MirroredRepeatWrapping=MirroredRepeatWrapping;exports.MixOperation=MixOperation;exports.MultiMaterial=MultiMaterial;exports.MultiplyBlending=MultiplyBlending;exports.MultiplyOperation=MultiplyOperation;exports.NearestFilter=NearestFilter;exports.NearestMipMapLinearFilter=NearestMipMapLinearFilter;exports.NearestMipMapNearestFilter=NearestMipMapNearestFilter;exports.NearestMipmapLinearFilter=NearestMipmapLinearFilter;exports.NearestMipmapNearestFilter=NearestMipmapNearestFilter;exports.NeverDepth=NeverDepth;exports.NeverStencilFunc=NeverStencilFunc;exports.NoBlending=NoBlending;exports.NoColors=NoColors;exports.NoToneMapping=NoToneMapping;exports.NormalAnimationBlendMode=NormalAnimationBlendMode;exports.NormalBlending=NormalBlending;exports.NotEqualDepth=NotEqualDepth;exports.NotEqualStencilFunc=NotEqualStencilFunc;exports.NumberKeyframeTrack=NumberKeyframeTrack;exports.Object3D=Object3D;exports.ObjectLoader=ObjectLoader;exports.ObjectSpaceNormalMap=ObjectSpaceNormalMap;exports.OctahedronBufferGeometry=OctahedronGeometry;exports.OctahedronGeometry=OctahedronGeometry;exports.OneFactor=OneFactor;exports.OneMinusDstAlphaFactor=OneMinusDstAlphaFactor;exports.OneMinusDstColorFactor=OneMinusDstColorFactor;exports.OneMinusSrcAlphaFactor=OneMinusSrcAlphaFactor;exports.OneMinusSrcColorFactor=OneMinusSrcColorFactor;exports.OrthographicCamera=OrthographicCamera;exports.PCFShadowMap=PCFShadowMap;exports.PCFSoftShadowMap=PCFSoftShadowMap;exports.PMREMGenerator=PMREMGenerator;exports.ParametricGeometry=ParametricGeometry;exports.Particle=Particle;exports.ParticleBasicMaterial=ParticleBasicMaterial;exports.ParticleSystem=ParticleSystem;exports.ParticleSystemMaterial=ParticleSystemMaterial;exports.Path=Path;exports.PerspectiveCamera=PerspectiveCamera;exports.Plane=Plane;exports.PlaneBufferGeometry=PlaneGeometry;exports.PlaneGeometry=PlaneGeometry;exports.PlaneHelper=PlaneHelper;exports.PointCloud=PointCloud;exports.PointCloudMaterial=PointCloudMaterial;exports.PointLight=PointLight;exports.PointLightHelper=PointLightHelper;exports.Points=Points;exports.PointsMaterial=PointsMaterial;exports.PolarGridHelper=PolarGridHelper;exports.PolyhedronBufferGeometry=PolyhedronGeometry;exports.PolyhedronGeometry=PolyhedronGeometry;exports.PositionalAudio=PositionalAudio;exports.PropertyBinding=PropertyBinding;exports.PropertyMixer=PropertyMixer;exports.QuadraticBezierCurve=QuadraticBezierCurve;exports.QuadraticBezierCurve3=QuadraticBezierCurve3;exports.Quaternion=Quaternion;exports.QuaternionKeyframeTrack=QuaternionKeyframeTrack;exports.QuaternionLinearInterpolant=QuaternionLinearInterpolant;exports.REVISION=REVISION;exports.RGBADepthPacking=RGBADepthPacking;exports.RGBAFormat=RGBAFormat;exports.RGBAIntegerFormat=RGBAIntegerFormat;exports.RGBA_ASTC_10x10_Format=RGBA_ASTC_10x10_Format;exports.RGBA_ASTC_10x5_Format=RGBA_ASTC_10x5_Format;exports.RGBA_ASTC_10x6_Format=RGBA_ASTC_10x6_Format;exports.RGBA_ASTC_10x8_Format=RGBA_ASTC_10x8_Format;exports.RGBA_ASTC_12x10_Format=RGBA_ASTC_12x10_Format;exports.RGBA_ASTC_12x12_Format=RGBA_ASTC_12x12_Format;exports.RGBA_ASTC_4x4_Format=RGBA_ASTC_4x4_Format;exports.RGBA_ASTC_5x4_Format=RGBA_ASTC_5x4_Format;exports.RGBA_ASTC_5x5_Format=RGBA_ASTC_5x5_Format;exports.RGBA_ASTC_6x5_Format=RGBA_ASTC_6x5_Format;exports.RGBA_ASTC_6x6_Format=RGBA_ASTC_6x6_Format;exports.RGBA_ASTC_8x5_Format=RGBA_ASTC_8x5_Format;exports.RGBA_ASTC_8x6_Format=RGBA_ASTC_8x6_Format;exports.RGBA_ASTC_8x8_Format=RGBA_ASTC_8x8_Format;exports.RGBA_BPTC_Format=RGBA_BPTC_Format;exports.RGBA_ETC2_EAC_Format=RGBA_ETC2_EAC_Format;exports.RGBA_PVRTC_2BPPV1_Format=RGBA_PVRTC_2BPPV1_Format;exports.RGBA_PVRTC_4BPPV1_Format=RGBA_PVRTC_4BPPV1_Format;exports.RGBA_S3TC_DXT1_Format=RGBA_S3TC_DXT1_Format;exports.RGBA_S3TC_DXT3_Format=RGBA_S3TC_DXT3_Format;exports.RGBA_S3TC_DXT5_Format=RGBA_S3TC_DXT5_Format;exports.RGBFormat=RGBFormat;exports.RGB_ETC1_Format=RGB_ETC1_Format;exports.RGB_ETC2_Format=RGB_ETC2_Format;exports.RGB_PVRTC_2BPPV1_Format=RGB_PVRTC_2BPPV1_Format;exports.RGB_PVRTC_4BPPV1_Format=RGB_PVRTC_4BPPV1_Format;exports.RGB_S3TC_DXT1_Format=RGB_S3TC_DXT1_Format;exports.RGFormat=RGFormat;exports.RGIntegerFormat=RGIntegerFormat;exports.RawShaderMaterial=RawShaderMaterial;exports.Ray=Ray;exports.Raycaster=Raycaster;exports.RectAreaLight=RectAreaLight;exports.RedFormat=RedFormat;exports.RedIntegerFormat=RedIntegerFormat;exports.ReinhardToneMapping=ReinhardToneMapping;exports.RepeatWrapping=RepeatWrapping;exports.ReplaceStencilOp=ReplaceStencilOp;exports.ReverseSubtractEquation=ReverseSubtractEquation;exports.RingBufferGeometry=RingGeometry;exports.RingGeometry=RingGeometry;exports.Scene=Scene;exports.SceneUtils=SceneUtils;exports.ShaderChunk=ShaderChunk;exports.ShaderLib=ShaderLib;exports.ShaderMaterial=ShaderMaterial;exports.ShadowMaterial=ShadowMaterial;exports.Shape=Shape;exports.ShapeBufferGeometry=ShapeGeometry;exports.ShapeGeometry=ShapeGeometry;exports.ShapePath=ShapePath;exports.ShapeUtils=ShapeUtils;exports.ShortType=ShortType;exports.Skeleton=Skeleton;exports.SkeletonHelper=SkeletonHelper;exports.SkinnedMesh=SkinnedMesh;exports.SmoothShading=SmoothShading;exports.Sphere=Sphere;exports.SphereBufferGeometry=SphereGeometry;exports.SphereGeometry=SphereGeometry;exports.Spherical=Spherical;exports.SphericalHarmonics3=SphericalHarmonics3;exports.SplineCurve=SplineCurve;exports.SpotLight=SpotLight;exports.SpotLightHelper=SpotLightHelper;exports.Sprite=Sprite;exports.SpriteMaterial=SpriteMaterial;exports.SrcAlphaFactor=SrcAlphaFactor;exports.SrcAlphaSaturateFactor=SrcAlphaSaturateFactor;exports.SrcColorFactor=SrcColorFactor;exports.StaticCopyUsage=StaticCopyUsage;exports.StaticDrawUsage=StaticDrawUsage;exports.StaticReadUsage=StaticReadUsage;exports.StereoCamera=StereoCamera;exports.StreamCopyUsage=StreamCopyUsage;exports.StreamDrawUsage=StreamDrawUsage;exports.StreamReadUsage=StreamReadUsage;exports.StringKeyframeTrack=StringKeyframeTrack;exports.SubtractEquation=SubtractEquation;exports.SubtractiveBlending=SubtractiveBlending;exports.TOUCH=TOUCH;exports.TangentSpaceNormalMap=TangentSpaceNormalMap;exports.TetrahedronBufferGeometry=TetrahedronGeometry;exports.TetrahedronGeometry=TetrahedronGeometry;exports.TextGeometry=TextGeometry;exports.Texture=Texture;exports.TextureLoader=TextureLoader;exports.TorusBufferGeometry=TorusGeometry;exports.TorusGeometry=TorusGeometry;exports.TorusKnotBufferGeometry=TorusKnotGeometry;exports.TorusKnotGeometry=TorusKnotGeometry;exports.Triangle=Triangle;exports.TriangleFanDrawMode=TriangleFanDrawMode;exports.TriangleStripDrawMode=TriangleStripDrawMode;exports.TrianglesDrawMode=TrianglesDrawMode;exports.TubeBufferGeometry=TubeGeometry;exports.TubeGeometry=TubeGeometry;exports.UVMapping=UVMapping;exports.Uint16Attribute=Uint16Attribute;exports.Uint16BufferAttribute=Uint16BufferAttribute;exports.Uint32Attribute=Uint32Attribute;exports.Uint32BufferAttribute=Uint32BufferAttribute;exports.Uint8Attribute=Uint8Attribute;exports.Uint8BufferAttribute=Uint8BufferAttribute;exports.Uint8ClampedAttribute=Uint8ClampedAttribute;exports.Uint8ClampedBufferAttribute=Uint8ClampedBufferAttribute;exports.Uniform=Uniform;exports.UniformsLib=UniformsLib;exports.UniformsUtils=UniformsUtils;exports.UnsignedByteType=UnsignedByteType;exports.UnsignedInt248Type=UnsignedInt248Type;exports.UnsignedIntType=UnsignedIntType;exports.UnsignedShort4444Type=UnsignedShort4444Type;exports.UnsignedShort5551Type=UnsignedShort5551Type;exports.UnsignedShortType=UnsignedShortType;exports.VSMShadowMap=VSMShadowMap;exports.Vector2=Vector2;exports.Vector3=Vector3;exports.Vector4=Vector4;exports.VectorKeyframeTrack=VectorKeyframeTrack;exports.Vertex=Vertex;exports.VertexColors=VertexColors;exports.VideoTexture=VideoTexture;exports.WebGL1Renderer=WebGL1Renderer;exports.WebGLCubeRenderTarget=WebGLCubeRenderTarget;exports.WebGLMultipleRenderTargets=WebGLMultipleRenderTargets;exports.WebGLMultisampleRenderTarget=WebGLMultisampleRenderTarget;exports.WebGLRenderTarget=WebGLRenderTarget;exports.WebGLRenderTargetCube=WebGLRenderTargetCube;exports.WebGLRenderer=WebGLRenderer;exports.WebGLUtils=WebGLUtils;exports.WireframeGeometry=WireframeGeometry;exports.WireframeHelper=WireframeHelper;exports.WrapAroundEnding=WrapAroundEnding;exports.XHRLoader=XHRLoader;exports.ZeroCurvatureEnding=ZeroCurvatureEnding;exports.ZeroFactor=ZeroFactor;exports.ZeroSlopeEnding=ZeroSlopeEnding;exports.ZeroStencilOp=ZeroStencilOp;exports._SRGBAFormat=_SRGBAFormat;exports.sRGBEncoding=sRGBEncoding;Object.defineProperty(exports,'__esModule',{value:true});});
 
-},{"@babel/runtime/helpers/assertThisInitialized":5,"@babel/runtime/helpers/asyncToGenerator":6,"@babel/runtime/helpers/classCallCheck":7,"@babel/runtime/helpers/createClass":8,"@babel/runtime/helpers/defineProperty":9,"@babel/runtime/helpers/get":10,"@babel/runtime/helpers/getPrototypeOf":11,"@babel/runtime/helpers/inherits":12,"@babel/runtime/helpers/interopRequireDefault":13,"@babel/runtime/helpers/possibleConstructorReturn":18,"@babel/runtime/helpers/slicedToArray":20,"@babel/runtime/helpers/typeof":23,"@babel/runtime/regenerator":25}]},{},[34]);
+},{"@babel/runtime/helpers/assertThisInitialized":4,"@babel/runtime/helpers/asyncToGenerator":5,"@babel/runtime/helpers/classCallCheck":6,"@babel/runtime/helpers/createClass":7,"@babel/runtime/helpers/defineProperty":8,"@babel/runtime/helpers/get":9,"@babel/runtime/helpers/getPrototypeOf":10,"@babel/runtime/helpers/inherits":11,"@babel/runtime/helpers/interopRequireDefault":12,"@babel/runtime/helpers/possibleConstructorReturn":17,"@babel/runtime/helpers/slicedToArray":19,"@babel/runtime/helpers/typeof":22,"@babel/runtime/regenerator":24}]},{},[34]);

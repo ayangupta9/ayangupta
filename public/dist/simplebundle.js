@@ -1108,12 +1108,11 @@ function main() {
 }
 
 function _main() {
-  _main = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4() {
-    var glassesModelSrc, canvascontainer, scene, camera, renderer, thinkermodelGroup, vendingmachineGroup, sneakersGroup, onWindowResize, loader, centerGroup, glassesModelIndex, modelChangerItem, nextModelItem, prevModelItem, topmodel, loadModel, _loadModel, thinkermodel, sneakersModel, vendingmachineModel, ambientLight, pointLight1, pointLight2, animate;
-
-    return _regenerator["default"].wrap(function _callee4$(_context4) {
+  _main = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
+    var glassesModelSrc, canvascontainer, scene, camera, renderer, thinkermodelGroup, vendingmachineGroup, sneakersGroup, onWindowResize, loader, centerGroup, glassesModelIndex, modelChangerItem, nextModelItem, prevModelItem, topmodel, loadModel, thinkermodel, sneakersModel, vendingmachineModel, ambientLight, pointLight1, pointLight2, animate;
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context4.prev = _context4.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
             animate = function _animate() {
               requestAnimationFrame(animate);
@@ -1134,56 +1133,34 @@ function _main() {
               renderer.render(scene, camera);
             };
 
-            _loadModel = function _loadModel3() {
-              _loadModel = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
+            loadModel = function _loadModel() {
+              if (topmodel !== null) {
+                centerGroup.remove(topmodel);
+                document.removeEventListener('mousemove', null);
+              }
+
+              loader.load(glassesModelSrc[glassesModelIndex].src, function (result) {
                 var _model$scale, _model$rotation, _model$position;
 
-                var result, model;
-                return _regenerator["default"].wrap(function _callee3$(_context3) {
-                  while (1) {
-                    switch (_context3.prev = _context3.next) {
-                      case 0:
-                        if (topmodel !== null) {
-                          centerGroup.remove(topmodel);
-                          document.removeEventListener('mousemove', null);
-                        }
+                var model = result.scene;
+                topmodel = model;
 
-                        _context3.next = 3;
-                        return loader.loadAsync(glassesModelSrc[glassesModelIndex].src);
+                (_model$scale = model.scale).set.apply(_model$scale, (0, _toConsumableArray2["default"])(glassesModelSrc[glassesModelIndex].scale));
 
-                      case 3:
-                        result = _context3.sent;
-                        model = result.scene;
-                        topmodel = model;
+                (_model$rotation = model.rotation).set.apply(_model$rotation, (0, _toConsumableArray2["default"])(glassesModelSrc[glassesModelIndex].rotation));
 
-                        (_model$scale = model.scale).set.apply(_model$scale, (0, _toConsumableArray2["default"])(glassesModelSrc[glassesModelIndex].scale));
+                (_model$position = model.position).set.apply(_model$position, (0, _toConsumableArray2["default"])(glassesModelSrc[glassesModelIndex].pos));
 
-                        (_model$rotation = model.rotation).set.apply(_model$rotation, (0, _toConsumableArray2["default"])(glassesModelSrc[glassesModelIndex].rotation));
-
-                        (_model$position = model.position).set.apply(_model$position, (0, _toConsumableArray2["default"])(glassesModelSrc[glassesModelIndex].pos));
-
-                        centerGroup.add(model);
-                        document.addEventListener('mousemove', function (event) {
-                          var mouse3D = new THREE.Vector3(event.clientX / window.innerWidth * 2 - 1, -(event.clientY / window.innerHeight) * 2.5 + 31.5, 0.65);
-                          centerGroup.lookAt(mouse3D);
-                        });
-                        document.addEventListener('touchmove', function (event) {
-                          var mouse3D = new THREE.Vector3(event.touches.item(0).clientX / window.innerWidth * 2 - 1, -(event.touches.item(0).clientY / window.innerHeight) * 2.5 + 31.5, 0.65);
-                          centerGroup.lookAt(mouse3D);
-                        });
-
-                      case 12:
-                      case "end":
-                        return _context3.stop();
-                    }
-                  }
-                }, _callee3);
-              }));
-              return _loadModel.apply(this, arguments);
-            };
-
-            loadModel = function _loadModel2() {
-              return _loadModel.apply(this, arguments);
+                centerGroup.add(model);
+                document.addEventListener('mousemove', function (event) {
+                  var mouse3D = new THREE.Vector3(event.clientX / window.innerWidth * 2 - 1, -(event.clientY / window.innerHeight) * 2.5 + 31.5, 0.65);
+                  centerGroup.lookAt(mouse3D);
+                });
+                document.addEventListener('touchmove', function (event) {
+                  var mouse3D = new THREE.Vector3(event.touches.item(0).clientX / window.innerWidth * 2 - 1, -(event.touches.item(0).clientY / window.innerHeight) * 2.5 + 31.5, 0.65);
+                  centerGroup.lookAt(mouse3D);
+                });
+              });
             };
 
             onWindowResize = function _onWindowResize(event) {
@@ -1283,7 +1260,10 @@ function _main() {
             centerGroup.position.set(0, 31, 0);
             scene.add(centerGroup);
             glassesModelIndex = new Date().getDay();
-            loadModel();
+            _context3.next = 26;
+            return loadModel();
+
+          case 26:
             modelChangerItem = document.getElementById('modelChangerItem');
             modelChangerItem.innerText = (glassesModelIndex + 1).toString();
             nextModelItem = document.getElementById('nextModelItem');
@@ -1356,37 +1336,31 @@ function _main() {
             }();
 
             topmodel = null;
+            thinkermodel = null;
             scene.add(thinkermodelGroup);
-            _context4.next = 36;
-            return loader.loadAsync('gltfmodels/thinker.glb');
-
-          case 36:
-            thinkermodel = _context4.sent.scene;
-            thinkermodel.position.set(0, 0, 0);
-            thinkermodel.scale.set(1.2, 1.2, 1.2);
-            thinkermodelGroup.add(thinkermodel);
-            console.log(thinkermodelGroup);
+            loader.load('gltfmodels/thinker.glb', function (result) {
+              thinkermodel = result.scene;
+              thinkermodel.position.set(0, 0, 0);
+              thinkermodel.scale.set(1.2, 1.2, 1.2);
+              thinkermodelGroup.add(thinkermodel);
+            });
             sneakersModel = null;
             scene.add(sneakersGroup);
             sneakersGroup.position.set(-17, -33, 0);
             sneakersGroup.rotation.x -= Math.PI / 8;
-            _context4.next = 47;
-            return loader.loadAsync('gltfmodels/sneakers.glb');
-
-          case 47:
-            sneakersModel = _context4.sent.scene;
-            sneakersModel.scale.set(100, 100, 100);
-            sneakersGroup.add(sneakersModel);
-            scene.add(vendingmachineGroup);
+            loader.load('gltfmodels/sneakers.glb', function (result) {
+              sneakersModel = result.scene;
+              sneakersModel.scale.set(100, 100, 100);
+              sneakersGroup.add(sneakersModel);
+            });
             vendingmachineModel = null;
-            _context4.next = 54;
-            return loader.loadAsync('gltfmodels/new_kirby_on_chair.glb');
-
-          case 54:
-            vendingmachineModel = _context4.sent.scene;
-            vendingmachineModel.scale.set(0.9, 0.9, 0.9);
-            vendingmachineModel.position.set(0, 0, 0);
-            vendingmachineGroup.add(vendingmachineModel);
+            scene.add(vendingmachineGroup);
+            loader.load('gltfmodels/new_kirby_on_chair.glb', function (result) {
+              vendingmachineModel = result.scene;
+              vendingmachineModel.scale.set(0.9, 0.9, 0.9);
+              vendingmachineModel.position.set(0, 0, 0);
+              vendingmachineGroup.add(vendingmachineModel);
+            });
             ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
             scene.add(ambientLight);
             pointLight1 = new THREE.PointLight(0xffffff, 1.0, 100);
@@ -1397,12 +1371,12 @@ function _main() {
             scene.add(pointLight2);
             animate();
 
-          case 67:
+          case 53:
           case "end":
-            return _context4.stop();
+            return _context3.stop();
         }
       }
-    }, _callee4);
+    }, _callee3);
   }));
   return _main.apply(this, arguments);
 }

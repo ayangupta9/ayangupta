@@ -125,7 +125,7 @@ async function main () {
 
   let glassesModelIndex = new Date().getDay()
 
-  loadModel()
+  await loadModel()
 
   const modelChangerItem = document.getElementById('modelChangerItem')
 
@@ -161,66 +161,67 @@ async function main () {
 
   let topmodel = null
 
-  async function loadModel () {
+  function loadModel () {
     if (topmodel !== null) {
       centerGroup.remove(topmodel)
       document.removeEventListener('mousemove', null)
     }
 
-    const result = await loader.loadAsync(
-      glassesModelSrc[glassesModelIndex].src
-    )
-    const model = result.scene
-    topmodel = model
-    model.scale.set(...glassesModelSrc[glassesModelIndex].scale)
-    model.rotation.set(...glassesModelSrc[glassesModelIndex].rotation)
-    model.position.set(...glassesModelSrc[glassesModelIndex].pos)
-    centerGroup.add(model)
+    loader.load(glassesModelSrc[glassesModelIndex].src, result => {
+      const model = result.scene
+      topmodel = model
+      model.scale.set(...glassesModelSrc[glassesModelIndex].scale)
+      model.rotation.set(...glassesModelSrc[glassesModelIndex].rotation)
+      model.position.set(...glassesModelSrc[glassesModelIndex].pos)
+      centerGroup.add(model)
 
-    document.addEventListener('mousemove', event => {
-      let mouse3D = new THREE.Vector3(
-        (event.clientX / window.innerWidth) * 2 - 1,
-        -(event.clientY / window.innerHeight) * 2.5 + 31.5,
-        0.65
-      )
-      centerGroup.lookAt(mouse3D)
-    })
+      document.addEventListener('mousemove', event => {
+        let mouse3D = new THREE.Vector3(
+          (event.clientX / window.innerWidth) * 2 - 1,
+          -(event.clientY / window.innerHeight) * 2.5 + 31.5,
+          0.65
+        )
+        centerGroup.lookAt(mouse3D)
+      })
 
-    document.addEventListener('touchmove', event => {
-      let mouse3D = new THREE.Vector3(
-        (event.touches.item(0).clientX / window.innerWidth) * 2 - 1,
-        -(event.touches.item(0).clientY / window.innerHeight) * 2.5 + 31.5,
-        0.65
-      )
-      centerGroup.lookAt(mouse3D)
+      document.addEventListener('touchmove', event => {
+        let mouse3D = new THREE.Vector3(
+          (event.touches.item(0).clientX / window.innerWidth) * 2 - 1,
+          -(event.touches.item(0).clientY / window.innerHeight) * 2.5 + 31.5,
+          0.65
+        )
+        centerGroup.lookAt(mouse3D)
+      })
     })
   }
 
+  let thinkermodel = null
   scene.add(thinkermodelGroup)
-  let thinkermodel = (await loader.loadAsync('gltfmodels/thinker.glb')).scene
-  thinkermodel.position.set(0, 0, 0)
-  thinkermodel.scale.set(1.2, 1.2, 1.2)
-  thinkermodelGroup.add(thinkermodel)
-
-  console.log(thinkermodelGroup)
+  loader.load('gltfmodels/thinker.glb', result => {
+    thinkermodel = result.scene
+    thinkermodel.position.set(0, 0, 0)
+    thinkermodel.scale.set(1.2, 1.2, 1.2)
+    thinkermodelGroup.add(thinkermodel)
+  })
 
   let sneakersModel = null
   scene.add(sneakersGroup)
   sneakersGroup.position.set(-17, -33, 0)
   sneakersGroup.rotation.x -= Math.PI / 8
-  sneakersModel = (await loader.loadAsync('gltfmodels/sneakers.glb')).scene
-  sneakersModel.scale.set(100, 100, 100)
-  sneakersGroup.add(sneakersModel)
-
-  scene.add(vendingmachineGroup)
+  loader.load('gltfmodels/sneakers.glb', result => {
+    sneakersModel = result.scene
+    sneakersModel.scale.set(100, 100, 100)
+    sneakersGroup.add(sneakersModel)
+  })
 
   let vendingmachineModel = null
-  vendingmachineModel = (
-    await loader.loadAsync('gltfmodels/new_kirby_on_chair.glb')
-  ).scene
-  vendingmachineModel.scale.set(0.9, 0.9, 0.9)
-  vendingmachineModel.position.set(0, 0, 0)
-  vendingmachineGroup.add(vendingmachineModel)
+  scene.add(vendingmachineGroup)
+  loader.load('gltfmodels/new_kirby_on_chair.glb', result => {
+    vendingmachineModel = result.scene
+    vendingmachineModel.scale.set(0.9, 0.9, 0.9)
+    vendingmachineModel.position.set(0, 0, 0)
+    vendingmachineGroup.add(vendingmachineModel)
+  })
 
   const ambientLight = new THREE.AmbientLight(0xffffff, 1.5)
   scene.add(ambientLight)
