@@ -1185,37 +1185,37 @@ function _main() {
             };
 
             glassesModelSrc = [{
-              src: 'gltfmodels/spiderman_paperbag_mask.glb',
+              src: '../gltfmodels/spiderman_paperbag_mask.glb',
               pos: [0, 0, 0],
               scale: [25, 25, 25],
               rotation: [0, 0, 0]
             }, {
-              src: 'gltfmodels/glasses/glasses1.glb',
+              src: '../gltfmodels/glasses/glasses1.glb',
               pos: [-2.4, 2.5, 0],
               scale: [1.8, 1.8, 1.8],
               rotation: [0, 0, 0]
             }, {
-              src: 'gltfmodels/glasses/glasses3.glb',
+              src: '../gltfmodels/glasses/glasses3.glb',
               pos: [-0.4, -3.5, -1.5],
               scale: [0.5, 0.5, 0.5],
               rotation: [0, 0, 0]
             }, {
-              src: 'gltfmodels/glasses/glasses9.glb',
+              src: '../gltfmodels/glasses/glasses9.glb',
               pos: [-2.7, 2.5, -1],
               scale: [1.5, 1.5, 1.5],
               rotation: [0, 0, 0]
             }, {
-              src: 'gltfmodels/glasses/glasses4.glb',
+              src: '../gltfmodels/glasses/glasses4.glb',
               pos: [0, 0.5, -0.5],
               scale: [5, 5, 5],
               rotation: [0, 0, 0]
             }, {
-              src: 'gltfmodels/glasses/glasses6.glb',
+              src: '../gltfmodels/glasses/glasses6.glb',
               pos: [0, -110.5, -8],
               scale: [0.6, 0.6, 0.6],
               rotation: [0, 0, 0]
             }, {
-              src: 'gltfmodels/glasses/glasses7.glb',
+              src: '../gltfmodels/glasses/glasses7.glb',
               pos: [0, -2.5, 0],
               scale: [0.6, 0.6, 0.6],
               rotation: [0, 0, 0]
@@ -1338,7 +1338,7 @@ function _main() {
             topmodel = null;
             thinkermodel = null;
             scene.add(thinkermodelGroup);
-            loader.load('gltfmodels/thinker.glb', function (result) {
+            loader.load('../gltfmodels/thinker.glb', function (result) {
               thinkermodel = result.scene;
               thinkermodel.position.set(0, 0, 0);
               thinkermodel.scale.set(1.2, 1.2, 1.2);
@@ -1348,14 +1348,14 @@ function _main() {
             scene.add(sneakersGroup);
             sneakersGroup.position.set(-17, -33, 0);
             sneakersGroup.rotation.x -= Math.PI / 8;
-            loader.load('gltfmodels/sneakers.glb', function (result) {
+            loader.load('../gltfmodels/sneakers.glb', function (result) {
               sneakersModel = result.scene;
               sneakersModel.scale.set(100, 100, 100);
               sneakersGroup.add(sneakersModel);
             });
             vendingmachineModel = null;
             scene.add(vendingmachineGroup);
-            loader.load('gltfmodels/new_kirby_on_chair.glb', function (result) {
+            loader.load('../gltfmodels/new_kirby_on_chair.glb', function (result) {
               vendingmachineModel = result.scene;
               vendingmachineModel.scale.set(0.9, 0.9, 0.9);
               vendingmachineModel.position.set(0, 0, 0);
