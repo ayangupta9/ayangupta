@@ -10,15 +10,15 @@ app.use(useragent.express())
 app.set('views', path.join(__dirname, '/public/views'))
 
 app.get('/', (req, res) => {
-  if (req.useragent.isMobile) {
-    res.redirect('/alt')
-  } else {
-    res.sendFile(path.join(__dirname, '/public/views/index.html'))
-  }
+  res.sendFile(path.join(__dirname, '/public/views/simpleindex.html'))
 })
 
 app.get('/alt', (req, res) => {
-  res.sendFile(path.join(__dirname, '/public/views/simpleindex.html'))
+  if (req.useragent.isMobile) {
+    res.redirect('/')
+  } else {
+    res.sendFile(path.join(__dirname, '/public/views/index.html'))
+  }
 })
 
 app.listen(PORT, () => {})

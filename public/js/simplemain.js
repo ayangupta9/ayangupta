@@ -125,7 +125,7 @@ async function main () {
 
   let glassesModelIndex = new Date().getDay()
 
-  await loadModel()
+  loadModel()
 
   const modelChangerItem = document.getElementById('modelChangerItem')
 
@@ -139,7 +139,7 @@ async function main () {
 
     nextModelItem.style = glassesModelIndex = (glassesModelIndex + 1) % 7
     modelChangerItem.innerText = (glassesModelIndex + 1).toString()
-    await loadModel()
+    loadModel()
 
     nextModelItem.classList.remove('disabledbutton')
     prevModelItem.classList.remove('disabledbutton')
@@ -154,7 +154,7 @@ async function main () {
       glassesModelIndex = (glassesModelIndex - 1) % 7
     }
     modelChangerItem.innerText = (glassesModelIndex + 1).toString()
-    await loadModel()
+    loadModel()
     nextModelItem.classList.remove('disabledbutton')
     prevModelItem.classList.remove('disabledbutton')
   }
