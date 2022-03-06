@@ -4,6 +4,22 @@ body {
   max-height: 100%;
 }
 
+body::-webkit-scrollbar-track {
+  background-color: #d0d0d0;
+  box-shadow: 0px 0px 2px 0px gray inset;
+  border-radius: 20px;
+}
+
+body::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 20px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #555555;
+  border-radius: 10px;
+}
+
 #mainPage {
   /* height: 100%; */
   display: flex;
@@ -48,9 +64,9 @@ body {
 }
 
 #mainSiteWrapper {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  /* position: absolute; */
+  /* top: 10px; */
+  /* right: 10px; */
   z-index: 3;
 }
 
@@ -306,23 +322,6 @@ p {
   transition: ease-in 0.1s;
 }
 
-/* #experienceContentWrapper::-webkit-scrollbar-track {
-  background-color: #d0d0d0;
-  box-shadow: 0px 0px 2px 0px gray inset;
-  border-radius: 20px;
-}
-
-
-#experienceContentWrapper::-webkit-scrollbar {
-  height: 4px;
-  border-radius: 20px;
-}
-
-#experienceContentWrapper::-webkit-scrollbar-thumb {
-  background-color: #ffffff;
-  border-radius: 10px;
-} */
-
 #contactsContentWrapper {
   display: flex;
   /* height: 150px; */
@@ -404,6 +403,10 @@ p {
     align-items: center;
   }
 
+  #aboutContentWrapper {
+    text-align: center;
+  }
+
   #contactsContentWrapper {
     margin-top: 20px;
     justify-content: center;
@@ -444,10 +447,22 @@ p {
 }
 
 @media (max-width: 650px) {
-  #thinkerWrapper {
-    height: 550px;
+  .container {
+    background: rgba(255, 255, 255, 0.5) !important;
+    /* background-color: wheat !important; */
   }
-  #kirbyWrapper {
-    height: 400px;
+  /* #skillsWrapper {
   }
+  #academicsWrapper {
+    background: rgba(255, 255, 255, 0.5);
+  }
+  #experienceWrapper {
+    background: rgba(255, 255, 255, 0.5);
+  }
+  #projectsWrapper {
+    background: rgba(255, 255, 255, 0.5);
+  }
+  #contactsWrapper {
+    background: rgba(255, 255, 255, 0.5);
+  } */
 }

@@ -1171,7 +1171,7 @@ function _main() {
 
               if (event.currentTarget.innerWidth <= 500) {
                 thinkermodelGroup.position.x = 0;
-                thinkermodelGroup.position.y = 3;
+                thinkermodelGroup.position.y = 6;
                 vendingmachineGroup.position.x = 0;
                 vendingmachineGroup.position.y = -36;
                 vendingmachineGroup.scale.set(0.6, 0.6, 0.6);
@@ -1260,10 +1260,7 @@ function _main() {
             centerGroup.position.set(0, 31, 0);
             scene.add(centerGroup);
             glassesModelIndex = new Date().getDay();
-            _context3.next = 26;
-            return loadModel();
-
-          case 26:
+            loadModel();
             modelChangerItem = document.getElementById('modelChangerItem');
             modelChangerItem.innerText = (glassesModelIndex + 1).toString();
             nextModelItem = document.getElementById('nextModelItem');
@@ -1279,14 +1276,11 @@ function _main() {
                         prevModelItem.classList.add('disabledbutton');
                         nextModelItem.style = glassesModelIndex = (glassesModelIndex + 1) % 7;
                         modelChangerItem.innerText = (glassesModelIndex + 1).toString();
-                        _context.next = 6;
-                        return loadModel();
-
-                      case 6:
+                        loadModel();
                         nextModelItem.classList.remove('disabledbutton');
                         prevModelItem.classList.remove('disabledbutton');
 
-                      case 8:
+                      case 7:
                       case "end":
                         return _context.stop();
                     }
@@ -1315,14 +1309,11 @@ function _main() {
                         }
 
                         modelChangerItem.innerText = (glassesModelIndex + 1).toString();
-                        _context2.next = 6;
-                        return loadModel();
-
-                      case 6:
+                        loadModel();
                         nextModelItem.classList.remove('disabledbutton');
                         prevModelItem.classList.remove('disabledbutton');
 
-                      case 8:
+                      case 7:
                       case "end":
                         return _context2.stop();
                     }
@@ -1371,7 +1362,7 @@ function _main() {
             scene.add(pointLight2);
             animate();
 
-          case 53:
+          case 52:
           case "end":
             return _context3.stop();
         }

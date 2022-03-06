@@ -84,8 +84,7 @@ async function main () {
 
     if (event.currentTarget.innerWidth <= 500) {
       thinkermodelGroup.position.x = 0
-      thinkermodelGroup.position.y = 3
-
+      thinkermodelGroup.position.y = 6
       vendingmachineGroup.position.x = 0
       vendingmachineGroup.position.y = -36
       vendingmachineGroup.scale.set(0.6, 0.6, 0.6)
